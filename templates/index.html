@@ -1,39 +1,125 @@
 {% extends 'base.html' %}
 {% block title %}Lista de Estudiantes{% endblock %}
+
 {% block content %}
-<a href="{{url_for ('create_estudiante')}}" class="btn btn-success mb-3">Agregar Estudiante</a>
-<br>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>No. control</th>
-            <th>Nombre</th>
-            <th>Apellido Paterno</th>
-            <th>Apellido Materno</th>
-            <th>Semestre</th>
-            <th>Acciones</th>
+<section class="section">
+  <div class="container">
 
-        </tr>
-    </thead>
-    <tbody>
-        {% for estudiante in estudiantes %}
-        <tr>
-            <td>{{ estudiante.no_control }}</td>
-            <td>{{ estudiante.nombre }}</td>
-            <td>{{ estudiante.ap_paterno }}</td>
-            <td>{{ estudiante.ap_materno }}</td>
-            <td>{{ estudiante.semestre }}</td>
-            <td>
-                 <a href="{{ url_for('delete_estudiante', no_control= estudiante.no_control )}}" 
-                class="btn btn-danger">Eliminar</a>
-                 <a href="{{ url_for('update_estudiante', no_control= estudiante.no_control )}}" 
-                class="btn btn-warning">Actualizar</a> 
-            </td> 
+    <!-- Encabezado empresarial -->
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <div>
+            <p class="title is-4 mb-1">Lista de Estudiantes</p>
+         
+          </div>
+        </div>
+      </div>
 
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+      <div class="level-right">
+        <div class="level-item">
+          <a href="{{ url_for('create_estudiante') }}" class="button is-success">
+            <span class="icon">
+              <i class="fas fa-user-plus"></i>
+            </span>
+            <span>Agregar Estudiante</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
+    <!-- Tarjeta / Panel empresarial -->
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon mr-2">
+            <i class="fas fa-users"></i>
+          </span>
+          Registros
+        </p>
 
+        <!-- Un pequeño indicador visual tipo "badge" -->
+        <div class="card-header-icon" aria-label="total">
+          <span class="tag is-link is-light">
+            {{ estudiantes|length }} Total
+          </span>
+        </div>
+      </header>
+
+      <div class="card-content">
+        <div class="table-container">
+          <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+              <tr>
+                <th>No. control</th>
+                <th>Nombre</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th class="has-text-centered">Semestre</th>
+                <th class="has-text-right">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for estudiante in estudiantes %}
+              <tr>
+                <td>
+                  <span class="tag is-light">{{ estudiante.no_control }}</span>
+                </td>
+                <td>{{ estudiante.nombre }}</td>
+                <td>{{ estudiante.ap_paterno }}</td>
+                <td>{{ estudiante.ap_materno }}</td>
+                <td class="has-text-centered">
+                  <span class="tag is-info is-light">{{ estudiante.semestre }}</span>
+                </td>
+
+                <td class="has-text-right">
+                  <div class="buttons are-small is-right">
+
+                    <!-- Empresarial: Editar en azul (más estándar) -->
+                    <a href="{{ url_for('update_estudiante', no_control=estudiante.no_control) }}"
+                       class="button is-info">
+                      <span class="icon">
+                        <i class="fas fa-pen-to-square"></i>
+                      </span>
+                      <span>Editar</span>
+                    </a>
+
+                    <!-- Eliminar rojo fuerte -->
+                    <a href="{{ url_for('delete_estudiante', no_control=estudiante.no_control) }}"
+                       class="button is-danger"
+                       onclick="return confirm('¿Seguro que deseas eliminar este estudiante?');">
+                      <span class="icon">
+                        <i class="fas fa-trash"></i>
+                      </span>
+                      <span>Eliminar</span>
+                    </a>
+
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+
+              {% if estudiantes|length == 0 %}
+              <tr>
+                <td colspan="6">
+                  <div class="notification is-light">
+                    <span class="icon mr-2">
+                      <i class="fas fa-circle-info"></i>
+                    </span>
+                    No hay estudiantes registrados.
+                  </div>
+                </td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+     
+    </div>
+
+  </div>
+</section>
 {% endblock %}
